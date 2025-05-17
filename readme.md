@@ -7,15 +7,12 @@
 
 This project is designed to showcase advanced SQL querying techniques through the analysis of over 1 million rows of Apple retail sales data. The dataset includes information about products, stores, sales transactions, and warranty claims across various Apple retail locations globally. By tackling a variety of questions, from basic to complex, you'll demonstrate your ability to write sophisticated SQL queries that extract valuable insights from large datasets.
 
-The project is ideal for data analysts looking to enhance their SQL skills by working with a large-scale dataset and solving real-world business questions.
 
 ## Entity Relationship Diagram (ERD)
 
 ![ERD](https://github.com/najirh/Apple-Retail-Sales-SQL-Project---Analyzing-Millions-of-Sales-Rows/blob/main/erd.png)
 
-**Get the guided project/datasets here**: [Get the Project Datasets](https://topmate.io/zero_analyst/1237072)
 
-Here’s the shortened and improved version of the "What’s Included" and "Why Choose This Project" sections, along with the link:
 
 ---
 
@@ -72,38 +69,51 @@ The project uses five main tables:
 
 The project is split into three tiers of questions to test SQL skills of increasing complexity:
 
-### Easy to Medium (10 Questions)
 
-1. Find the number of stores in each country.
-2. Calculate the total number of units sold by each store.
-3. Identify how many sales occurred in December 2023.
-4. Determine how many stores have never had a warranty claim filed.
-5. Calculate the percentage of warranty claims marked as "Warranty Void".
-6. Identify which store had the highest total units sold in the last year.
-7. Count the number of unique products sold in the last year.
-8. Find the average price of products in each category.
-9. How many warranty claims were filed in 2020?
-10. For each store, identify the best-selling day based on highest quantity sold.
+A breakdown of store distribution across countries helps us understand geographic presence and market reach.
 
-### Medium to Hard (5 Questions)
+Total units sold by each store reveals performance rankings and highlights top-selling locations.
 
-11. Identify the least selling product in each country for each year based on total units sold.
-12. Calculate how many warranty claims were filed within 180 days of a product sale.
-13. Determine how many warranty claims were filed for products launched in the last two years.
-14. List the months in the last three years where sales exceeded 5,000 units in the USA.
-15. Identify the product category with the most warranty claims filed in the last two years.
+Analyzing December 2023 sales quantifies peak-season demand and helps plan for holiday inventory and staffing.
 
-### Complex (5 Questions)
+Identifying stores with no warranty claims provides insight into exceptional product handling or underreporting issues.
 
-16. Determine the percentage chance of receiving warranty claims after each purchase for each country.
-17. Analyze the year-by-year growth ratio for each store.
-18. Calculate the correlation between product price and warranty claims for products sold in the last five years, segmented by price range.
-19. Identify the store with the highest percentage of "Paid Repaired" claims relative to total claims filed.
-20. Write a query to calculate the monthly running total of sales for each store over the past four years and compare trends during this period.
+The proportion of claims marked as “Warranty Void” gives visibility into customer misuse or policy misalignment.
 
-### Bonus Insight
+The top-performing store in the last year is spotlighted based on total units sold, guiding recognition and resource allocation.
 
-- Analyze product sales trends over time, segmented into key periods: from launch to 6 months, 6-12 months, 12-18 months, and beyond 18 months.
+The count of distinct products sold last year reflects inventory diversity and customer product engagement.
+
+Category-wise average pricing outlines how product value is structured across segments, useful for pricing strategy.
+
+The number of warranty claims from 2020 helps assess post-sale support load during that period.
+
+Discovering each store’s best-selling day identifies high-traffic periods for better operational planning.
+
+
+Tracking the least-selling product annually by country helps detect inventory laggards and regional mismatches.
+
+Warranty claims filed within 180 days of purchase indicate early-life product issues and quality concerns.
+
+Measuring claims for products launched in the last two years sheds light on how well new offerings are performing post-launch.
+
+Monthly USA sales that crossed the 5,000-unit threshold highlight peak months for demand over the past three years.
+
+Identifying the most claim-prone category provides actionable insight into product design, manufacturing, or support weaknesses.
+
+ 
+The percentage chance of receiving a claim after purchase per country reflects product reliability and customer expectations regionally.
+
+Year-over-year growth analysis of each store tracks momentum and helps distinguish thriving versus stagnant locations.
+
+Correlating product price with claim volume reveals whether premium or budget products are more frequently serviced.
+
+Identifying the store with the highest percentage of "Paid Repaired" claims shows where repair services are most utilized, possibly reflecting trust or pricing strategy.
+
+Monthly running sales totals for each store over the past four years help uncover long-term sales patterns and seasonal trends.
+
+Segmenting product sales into lifecycle stages (launch to 6 months, 6–12 months, 12–18 months, beyond 18 months) reveals how quickly products gain traction, sustain demand, or phase out—critical for lifecycle and promotion planning.
+
 
 ## Project Focus
 
