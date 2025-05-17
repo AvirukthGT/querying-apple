@@ -370,3 +370,23 @@ SELECT
 FROM 
     cte;
 
+-- Analyzing product sales over key time intervals since launch.
+-- Helps evaluate product lifecycle performance: early adoption vs. long-term traction.
+
+SELECT 
+    CASE 
+        WHEN s.sale_date BETWEEN p.launch_date AND p.launch_date + INTERVAL '6 month' THEN 'Within 6 Months'
+        WHEN s.sale_date BETWEEN p.launch_date + INTERVAL '6 month' AND p.launch_date + INTERVAL '12 month' THEN '6-12 Months'
+        WHEN s.sale_date BETWEEN p.launch_date + INTERVAL '12 month' AND p.launch_date + INTERVAL '18 month' THEN '12-18 Months'
+        ELSE 'Beyond 18 Months'
+    END AS month_segment,
+    SUM(s.quantity) AS total_units_sold
+FROM 
+    sales s
+JOIN 
+    products p USING(product_id)
+GROUP BY 
+    month_segment
+ORDER BY 
+    month_segment;
+
