@@ -239,4 +239,134 @@ ORDER BY
     num_claims DESC
 LIMIT 1;
 
+-- Estimating the percentage of purchases that resulted in warranty claims per country.
+-- Helps assess post-sale service load and customer satisfaction differences across regions.
+SELECT 
+    st.country,
+    SUM(s.quantity) AS total_units_sold,
+    COUNT(w.claim_id) AS total_claims,
+    ROUND(COUNT(w.claim_id)::NUMERIC / SUM(s.quantity) * 100, 2) AS claim_ratio
+FROM 
+    sales s
+JOIN 
+    stores st USING(store_id)
+LEFT JOIN 
+    warranty w USING(sale_id)
+GROUP BY 
+    st.country
+ORDER BY 
+    claim_ratio DESC;
+
+-- Calculating year-over-year sales growth for each Apple Store.
+-- Enables performance tracking and helps leadership evaluate which stores are improving and which need support.
+WITH cte AS (
+    SELECT 
+        st.store_id,
+        st.store_name,
+        EXTRACT(YEAR FROM s.sale_date) AS year,
+        SUM(p.price * s.quantity) AS current_total_sale
+    FROM 
+        sales s
+    JOIN 
+        stores st USING(store_id)
+    JOIN 
+        products p USING(product_id)
+    GROUP BY 
+        st.store_id, st.store_name, year
+),
+prev_year AS (
+    SELECT 
+        *,
+        LAG(current_total_sale, 1) OVER (PARTITION BY store_id ORDER BY year) AS prev_total_sale
+    FROM 
+        cte
+)
+SELECT 
+    *,
+    ROUND((current_total_sale - prev_total_sale)::NUMERIC / NULLIF(prev_total_sale, 0)::NUMERIC, 2) AS growth_ratio
+FROM 
+    prev_year;
+
+-- Segmenting product prices and examining how they correlate with warranty claim volume in the past 5 years.
+-- Offers insight into whether more expensive products are more likely to result in warranty issues.
+SELECT
+    CASE
+        WHEN p.price BETWEEN 0 AND 499 THEN 'Less Expensive'
+        WHEN p.price BETWEEN 500 AND 999 THEN 'Moderately Expensive'
+        WHEN p.price >= 1000 THEN 'Highly Expensive'
+        ELSE 'Invalid'
+    END AS price_bucket,
+    COUNT(w.claim_id) AS num_claims
+FROM 
+    warranty w
+LEFT JOIN 
+    sales s USING(sale_id)
+JOIN 
+    products p USING(product_id)
+WHERE 
+    s.sale_date >= CURRENT_DATE - INTERVAL '5 year'
+GROUP BY 
+    price_bucket;
+
+-- Identifying the store with the highest share of "Paid Repaired" warranty claims.
+-- Highlights service efficiency or customer willingness to invest in repair, which may indicate brand trust or product longevity.
+WITH paid_repaired AS (
+    SELECT 
+        s.store_id,
+        COUNT(w.claim_id) AS total_claims_repaired
+    FROM 
+        sales s
+    RIGHT JOIN 
+        warranty w USING(sale_id)
+    WHERE 
+        w.repair_status = 'Paid Repaired'
+    GROUP BY 
+        s.store_id
+),
+total AS (
+    SELECT 
+        s.store_id,
+        COUNT(w.claim_id) AS total_claims
+    FROM 
+        sales s
+    RIGHT JOIN 
+        warranty w USING(sale_id)
+    GROUP BY 
+        s.store_id
+)
+SELECT 
+    t.store_id,
+    st.store_name,
+    t.total_claims,
+    COALESCE(pr.total_claims_repaired, 0) AS total_claims_repaired,
+    ROUND(COALESCE(pr.total_claims_repaired, 0)::NUMERIC / NULLIF(t.total_claims, 0)::NUMERIC * 100, 2) AS percentage_paid_repair
+FROM 
+    total t
+LEFT JOIN 
+    paid_repaired pr USING(store_id)
+JOIN 
+    stores st USING(store_id);
+
+-- Calculating monthly running total revenue for each store over the past 5 years.
+-- Supports revenue trend analysis and helps compare seasonal/store-level performance over time.
+WITH cte AS (
+    SELECT 
+        s.store_id,
+        EXTRACT(YEAR FROM s.sale_date) AS year,
+        TO_CHAR(s.sale_date, 'MM') AS month,
+        SUM(s.quantity * p.price) AS total_revenue
+    FROM 
+        sales s
+    JOIN 
+        products p USING(product_id)
+    WHERE 
+        s.sale_date >= CURRENT_DATE - INTERVAL '5 year'
+    GROUP BY 
+        s.store_id, year, month
+)
+SELECT 
+    *,
+    SUM(total_revenue) OVER (PARTITION BY store_id ORDER BY year, month) AS running_total
+FROM 
+    cte;
 
