@@ -67,53 +67,89 @@ The project uses five main tables:
 
 ## Objectives
 
-The project is split into three tiers of questions to test SQL skills of increasing complexity:
+The project is split into different categories of insights:
 
 
-A breakdown of store distribution across countries helps us understand geographic presence and market reach.
+## 🏬 Store Performance & Operations
+Objective: Understand how Apple Stores perform individually and across regions.
 
-Total units sold by each store reveals performance rankings and highlights top-selling locations.
+1. Store Distribution by Country
+Reveals geographic market presence and helps guide expansion or resource reallocation.
 
-Analyzing December 2023 sales quantifies peak-season demand and helps plan for holiday inventory and staffing.
+2. Total Units Sold per Store
+Highlights top-performing stores and supports benchmarking performance.
 
-Identifying stores with no warranty claims provides insight into exceptional product handling or underreporting issues.
+3. Best-Selling Day per Store
+Identifies high-traffic days for optimizing staffing, inventory, and promotions.
 
-The proportion of claims marked as “Warranty Void” gives visibility into customer misuse or policy misalignment.
+4. Year-over-Year Store Growth
+Tracks performance momentum to distinguish growing stores from stagnating ones.
 
-The top-performing store in the last year is spotlighted based on total units sold, guiding recognition and resource allocation.
+5. Store with Highest "Paid Repaired" Claim Percentage
+Sheds light on customer trust, service uptake, and possible pricing or support effectiveness.
 
-The count of distinct products sold last year reflects inventory diversity and customer product engagement.
+## 📦 Product Lifecycle & Demand Patterns
+Objective: Evaluate how products perform over time, across price points, and by region.
 
-Category-wise average pricing outlines how product value is structured across segments, useful for pricing strategy.
+1. Product Sales Segmented by Launch Period
+Analyzes demand trends from launch to maturity, guiding lifecycle and marketing strategies.
 
-The number of warranty claims from 2020 helps assess post-sale support load during that period.
+2. Top Store by Units Sold in the Last Year
+Measures product traction through sales concentration at top locations.
 
-Discovering each store’s best-selling day identifies high-traffic periods for better operational planning.
+3. Number of Unique Products Sold in the Last Year
+Reflects product catalog diversity and customer engagement.
 
+4. Least-Selling Product by Country & Year
+Detects underperforming SKUs, enabling targeted portfolio optimization.
 
-Tracking the least-selling product annually by country helps detect inventory laggards and regional mismatches.
+5. Monthly Sales > 5,000 Units in the USA (Last 3 Years)
+Uncovers high-demand periods for focused marketing or seasonal planning.
 
-Warranty claims filed within 180 days of purchase indicate early-life product issues and quality concerns.
+## 💰 Revenue, Pricing, & Category Insights
+Objective: Assess product pricing strategies and category-level financial impact.
 
-Measuring claims for products launched in the last two years sheds light on how well new offerings are performing post-launch.
+1. Average Price per Category
+Informs pricing strategy and market positioning across product lines.
 
-Monthly USA sales that crossed the 5,000-unit threshold highlight peak months for demand over the past three years.
+2. Monthly Running Total of Store Sales (Last 4 Years)
+Identifies revenue trends and enables historical comparisons and forecasting.
 
-Identifying the most claim-prone category provides actionable insight into product design, manufacturing, or support weaknesses.
+3. Correlation Between Price Ranges & Warranty Claims
+Reveals how product cost influences claim behavior, guiding design and support policies.
 
- 
-The percentage chance of receiving a claim after purchase per country reflects product reliability and customer expectations regionally.
+## 🛠 Warranty & Support Analysis
+Objective: Gauge product reliability and post-sale service effectiveness.
 
-Year-over-year growth analysis of each store tracks momentum and helps distinguish thriving versus stagnant locations.
+1. Percentage of "Warranty Void" Claims
+Highlights customer misuse, policy issues, or communication gaps.
 
-Correlating product price with claim volume reveals whether premium or budget products are more frequently serviced.
+2. Stores with No Warranty Claims
+Spotlights locations with high product reliability or reporting inconsistencies.
 
-Identifying the store with the highest percentage of "Paid Repaired" claims shows where repair services are most utilized, possibly reflecting trust or pricing strategy.
+3. Warranty Claims within 180 Days of Purchase
+Flags potential early-life product failures or manufacturing issues.
 
-Monthly running sales totals for each store over the past four years help uncover long-term sales patterns and seasonal trends.
+4. Warranty Claims for Products Launched in the Last 2 Years
+Measures reliability of recent launches, helping evaluate product readiness.
 
-Segmenting product sales into lifecycle stages (launch to 6 months, 6–12 months, 12–18 months, beyond 18 months) reveals how quickly products gain traction, sustain demand, or phase out—critical for lifecycle and promotion planning.
+5. Category with Most Warranty Claims (Last 2 Years)
+Identifies problematic product lines for engineering, quality, or support intervention.
 
+6. Percentage of Purchases Leading to Claims (Per Country)
+Compares claim rates regionally to uncover support needs or product design improvements.
+
+## 📅 Time-Based Sales Trends
+Objective: Analyze temporal patterns in sales and customer behavior.
+
+1. Sales in December 2023
+Evaluates holiday season demand and supports year-end planning.
+
+2. Warranty Claims Filed in 2020
+Provides historical context to service volumes during specific periods.
+
+3. Monthly Revenue Trends (Running Total)
+Helps track growth patterns, revenue momentum, and performance consistency.
 
 ## Project Focus
 
