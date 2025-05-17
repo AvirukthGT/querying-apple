@@ -137,3 +137,106 @@ FROM (
         st.store_name, day
 ) t
 WHERE rnk = 1;
+
+-- Finding the least-selling product in each country for each year.
+-- Helps identify underperforming items by region and time, enabling more targeted product phase-outs or regional promotions.
+WITH cte AS (
+    SELECT 
+        st.country,
+        EXTRACT(YEAR FROM s.sale_date) AS year,
+        p.product_name,
+        SUM(s.quantity) AS total_units_sold,
+        DENSE_RANK() OVER (
+            PARTITION BY st.country, EXTRACT(YEAR FROM s.sale_date) 
+            ORDER BY SUM(s.quantity)
+        ) AS rnk
+    FROM 
+        products p
+    JOIN 
+        sales s USING(product_id)
+    JOIN 
+        stores st USING(store_id)
+    GROUP BY 
+        st.country, year, p.product_name
+)
+SELECT 
+    country,
+    year,
+    product_name,
+    total_units_sold
+FROM 
+    cte
+WHERE 
+    rnk = 1
+ORDER BY 
+    country, year, product_name DESC;
+
+-- Calculating how many warranty claims were made within 180 days of purchase.
+-- Useful for measuring short-term reliability of products and possible manufacturing defects.
+SELECT 
+    *, 
+    (w.claim_date - s.sale_date) AS num_days
+FROM 
+    sales s
+JOIN 
+    warranty w USING(sale_id)
+WHERE 
+    (w.claim_date - s.sale_date) < 180;
+
+-- Counting warranty claims for products launched in the last 3 years.
+-- Assesses the durability and performance of newer products post-launch, useful for product quality assurance.
+SELECT 
+    p.product_name,
+    COUNT(p.product_name) AS num_claims
+FROM 
+    products p
+JOIN 
+    sales s USING(product_id)
+RIGHT JOIN 
+    warranty w USING(sale_id)
+WHERE 
+    p.launch_date >= CURRENT_DATE - INTERVAL '3 year'
+GROUP BY 
+    p.product_name
+ORDER BY 
+    num_claims DESC;
+
+-- Identifying months in the last 4 years when sales from USA stores exceeded 5000 units.
+-- Supports seasonal trend analysis and planning for marketing or inventory based on high-demand periods.
+SELECT 
+    TO_CHAR(s.sale_date, 'MM-YYYY') AS month,
+    SUM(s.quantity) AS sale_units
+FROM 
+    sales s
+JOIN 
+    stores st USING(store_id)
+WHERE 
+    s.sale_date >= CURRENT_DATE - INTERVAL '4 year'
+    AND st.country = 'USA'
+GROUP BY 
+    month
+HAVING 
+    SUM(s.quantity) > 5000;
+
+-- Finding the product category with the most warranty claims in the last 3 years.
+-- Highlights product lines with recurring issues and can guide improvements in design, sourcing, or customer support.
+SELECT 
+    c.category_name,
+    COUNT(*) AS num_claims
+FROM 
+    warranty w
+LEFT JOIN 
+    sales s USING(sale_id)
+JOIN 
+    products p USING(product_id)
+JOIN 
+    category c USING(category_id)
+WHERE 
+    w.claim_date >= CURRENT_DATE - INTERVAL '3 year'
+GROUP BY 
+    c.category_name
+ORDER BY 
+    num_claims DESC
+LIMIT 1;
+
+
