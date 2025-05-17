@@ -69,9 +69,8 @@ SELECT
         2
     ) AS warranty_void_percentage;
 
-
--- 6. Which store had the highest total units sold in 2024?
-
+-- Identifying the top-performing Apple Store in terms of units sold during 2024.
+-- This helps in recognizing the most commercially successful location, which can guide future investments, promotions, or layout replication.
 SELECT 
     st.store_name, 
     SUM(s.quantity) AS total_units_sold
@@ -80,14 +79,61 @@ FROM
 JOIN 
     stores st USING(store_id)
 WHERE
-	extract (year from s.sale_date)=2024
+    EXTRACT(YEAR FROM s.sale_date) = 2024
 GROUP BY 
     st.store_name
 ORDER BY 
     total_units_sold DESC
-	limit 1 ;
+LIMIT 1;
 
--- 7. Count the number of unique products sold in the last year.
--- 8. What is the average price of products in each category?
--- 9. How many warranty claims were filed in 2020?
--- 10. Identify each store and best selling day based on highest qty sold
+-- Measuring product diversity by counting the number of unique items sold in 2023.
+-- Useful for understanding catalog effectiveness and inventory variety from a historical perspective.
+SELECT 
+    COUNT(DISTINCT product_id) AS unique_products_sold_2023
+FROM 
+    sales
+WHERE 
+    EXTRACT(YEAR FROM sale_date) = 2023;
+
+-- Calculating average product price per category.
+-- Helps in pricing strategy and understanding the relative value offered within each product segment (e.g., accessories vs. devices).
+SELECT 
+    c.category_name,
+    ROUND(AVG(p.price)::NUMERIC, 2) AS average_price
+FROM 
+    products p
+JOIN 
+    category c USING(category_id)
+GROUP BY 
+    c.category_name
+ORDER BY 
+    average_price DESC;
+
+-- Quantifying total warranty claims filed in 2020.
+-- Indicates post-sale service load and potential quality issues during that period, helping support planning and product evaluation.
+SELECT 
+    COUNT(*) AS no_of_warranty_claims_2020
+FROM 
+    sales
+JOIN 
+    warranty w USING(sale_id)
+WHERE 
+    EXTRACT(YEAR FROM sale_date) = 2020;
+
+-- Identifying the best-selling day of the week for each Apple Store based on total quantity sold.
+-- Enables optimization of staffing, promotional efforts, and stock allocation for peak days at individual store levels.
+SELECT *
+FROM (
+    SELECT 
+        st.store_name,
+        TRIM(TO_CHAR(s.sale_date, 'Day')) AS day,
+        SUM(s.quantity) AS total_units_sold,
+        RANK() OVER (PARTITION BY st.store_name ORDER BY SUM(s.quantity) DESC) AS rnk
+    FROM 
+        sales s
+    JOIN 
+        stores st USING(store_id)
+    GROUP BY 
+        st.store_name, day
+) t
+WHERE rnk = 1;
